@@ -1,0 +1,129 @@
+2026-09-06T09:43:39.021+05:30  INFO 15148 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : Starting MoneyManagerApplication using Java 21.0.8 with PID 15148 (C:\Users\jhadi\OneDrive\Desktop\ajava fullstack\money-manager\target\classes started by jhadi in C:\Users\jhadi\OneDrive\Desktop\ajava fullstack\money-manager)
+2026-09-06T09:43:39.021+05:30  INFO 15148 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T09:43:40.430+05:30  INFO 15148 --- [money-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T09:43:40.548+05:30  INFO 15148 --- [money-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 96 ms. Found 4 JPA repository interfaces.
+2026-09-06T09:43:41.648+05:30  INFO 15148 --- [money-manager] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-09-06T09:43:41.674+05:30  INFO 15148 --- [money-manager] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T09:43:41.674+05:30  INFO 15148 --- [money-manager] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-09-06T09:43:41.813+05:30  INFO 15148 --- [money-manager] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2670 ms
+2026-09-06T09:43:42.136+05:30  INFO 15148 --- [money-manager] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-09-06T09:43:42.270+05:30  INFO 15148 --- [money-manager] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-09-06T09:43:43.285+05:30  INFO 15148 --- [money-manager] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T09:43:43.356+05:30  INFO 15148 --- [money-manager] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-06T09:43:47.535+05:30  INFO 15148 --- [money-manager] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@38c55a8a
+2026-09-06T09:43:47.537+05:30  INFO 15148 --- [money-manager] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-06T09:43:47.854+05:30  WARN 15148 --- [money-manager] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T09:43:48.521+05:30  INFO 15148 --- [money-manager] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://ep-flat-shadow-b3t2ingq-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.6
+	Default catalog/schema: neondb/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T09:43:50.674+05:30  INFO 15148 --- [money-manager] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T09:43:52.482+05:30  INFO 15148 --- [money-manager] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T09:43:52.657+05:30  INFO 15148 --- [money-manager] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-06T09:43:54.477+05:30  WARN 15148 --- [money-manager] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T09:43:54.632+05:30  INFO 15148 --- [money-manager] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name appUserDetailService
+2026-09-06T09:43:55.395+05:30  INFO 15148 --- [money-manager] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T09:43:55.412+05:30  INFO 15148 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : Started MoneyManagerApplication in 17.377 seconds (process running for 18.25)
+2026-09-06T09:45:10.299+05:30  INFO 15148 --- [money-manager] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T09:45:10.312+05:30  INFO 15148 --- [money-manager] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-09-06T09:45:10.326+05:30  INFO 15148 --- [money-manager] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T09:45:10.326+05:30  INFO 15148 --- [money-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-09-06T09:45:12.210+05:30  INFO 15148 --- [money-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-09-06T09:45:15.144+05:30  INFO 19636 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : Starting MoneyManagerApplication using Java 21.0.8 with PID 19636 (C:\Users\jhadi\OneDrive\Desktop\ajava fullstack\money-manager\target\classes started by jhadi in C:\Users\jhadi\OneDrive\Desktop\ajava fullstack\money-manager)
+2026-09-06T09:45:15.152+05:30  INFO 19636 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T09:45:16.323+05:30  INFO 19636 --- [money-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T09:45:16.434+05:30  INFO 19636 --- [money-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 93 ms. Found 4 JPA repository interfaces.
+2026-09-06T09:45:17.393+05:30  INFO 19636 --- [money-manager] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-09-06T09:45:17.418+05:30  INFO 19636 --- [money-manager] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T09:45:17.420+05:30  INFO 19636 --- [money-manager] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-09-06T09:45:17.517+05:30  INFO 19636 --- [money-manager] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2292 ms
+2026-09-06T09:45:17.862+05:30  INFO 19636 --- [money-manager] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-09-06T09:45:17.963+05:30  INFO 19636 --- [money-manager] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-09-06T09:45:18.781+05:30  INFO 19636 --- [money-manager] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T09:45:18.838+05:30  INFO 19636 --- [money-manager] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-06T09:45:21.668+05:30  INFO 19636 --- [money-manager] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4d4c4b14
+2026-09-06T09:45:21.671+05:30  INFO 19636 --- [money-manager] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-06T09:45:21.937+05:30  WARN 19636 --- [money-manager] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T09:45:22.585+05:30  INFO 19636 --- [money-manager] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://ep-flat-shadow-b3t2ingq-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.6
+	Default catalog/schema: neondb/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T09:45:24.629+05:30  INFO 19636 --- [money-manager] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T09:45:26.032+05:30  INFO 19636 --- [money-manager] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T09:45:26.185+05:30  INFO 19636 --- [money-manager] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-06T09:45:27.881+05:30  WARN 19636 --- [money-manager] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T09:45:28.018+05:30  INFO 19636 --- [money-manager] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name appUserDetailService
+2026-09-06T09:45:28.670+05:30  INFO 19636 --- [money-manager] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T09:45:28.684+05:30  INFO 19636 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : Started MoneyManagerApplication in 14.297 seconds (process running for 15.078)
+2026-09-06T09:45:43.587+05:30  INFO 19636 --- [money-manager] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T09:45:43.603+05:30  INFO 19636 --- [money-manager] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-09-06T09:45:43.612+05:30  INFO 19636 --- [money-manager] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T09:45:43.617+05:30  INFO 19636 --- [money-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-09-06T09:45:46.640+05:30  INFO 19636 --- [money-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-09-06T10:03:33.895+05:30  INFO 22096 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : Starting MoneyManagerApplication using Java 21.0.8 with PID 22096 (C:\Users\jhadi\OneDrive\Desktop\ajava fullstack\money-manager\target\classes started by jhadi in C:\Users\jhadi\OneDrive\Desktop\ajava fullstack\money-manager)
+2026-09-06T10:03:33.897+05:30  INFO 22096 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T10:03:34.993+05:30  INFO 22096 --- [money-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T10:03:35.097+05:30  INFO 22096 --- [money-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 92 ms. Found 4 JPA repository interfaces.
+2026-09-06T10:03:36.017+05:30  INFO 22096 --- [money-manager] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-09-06T10:03:36.039+05:30  INFO 22096 --- [money-manager] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T10:03:36.039+05:30  INFO 22096 --- [money-manager] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-09-06T10:03:36.127+05:30  INFO 22096 --- [money-manager] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2154 ms
+2026-09-06T10:03:36.485+05:30  INFO 22096 --- [money-manager] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-09-06T10:03:36.594+05:30  INFO 22096 --- [money-manager] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-09-06T10:03:37.295+05:30  INFO 22096 --- [money-manager] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T10:03:37.339+05:30  INFO 22096 --- [money-manager] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-06T10:03:40.651+05:30  INFO 22096 --- [money-manager] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4d4c4b14
+2026-09-06T10:03:40.651+05:30  INFO 22096 --- [money-manager] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-06T10:03:40.917+05:30  WARN 22096 --- [money-manager] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T10:03:41.654+05:30  INFO 22096 --- [money-manager] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://ep-flat-shadow-b3t2ingq-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.6
+	Default catalog/schema: neondb/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T10:03:43.598+05:30  INFO 22096 --- [money-manager] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T10:03:45.272+05:30  INFO 22096 --- [money-manager] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T10:03:45.417+05:30  INFO 22096 --- [money-manager] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-06T10:03:46.865+05:30  WARN 22096 --- [money-manager] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T10:03:47.003+05:30  INFO 22096 --- [money-manager] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name appUserDetailService
+2026-09-06T10:03:47.677+05:30  INFO 22096 --- [money-manager] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T10:03:47.690+05:30  INFO 22096 --- [money-manager] [main] c.e.m.manager.MoneyManagerApplication    : Started MoneyManagerApplication in 14.583 seconds (process running for 15.261)
+2026-09-06T10:21:05.452+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5db0e235 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.456+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5177041e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.458+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4d4c4b14 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.459+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=11m54s609ms551µs700ns).
+2026-09-06T10:21:05.461+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@b8ce54f (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.462+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7af3f6f5 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.464+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@14e76a3 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.465+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@68f0d560 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.467+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@43af3ac (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.469+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@619bf980 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:21:05.470+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@1312607e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-09-06T10:27:26.573+05:30  WARN 22096 --- [money-manager] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m21s114ms324µs300ns).
+2026-09-06T10:30:46.546+05:30  INFO 22096 --- [money-manager] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T10:30:46.557+05:30  INFO 22096 --- [money-manager] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-09-06T10:30:46.564+05:30  INFO 22096 --- [money-manager] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T10:30:46.569+05:30  INFO 22096 --- [money-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-09-06T10:30:47.769+05:30  INFO 22096 --- [money-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
