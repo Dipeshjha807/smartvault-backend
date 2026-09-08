@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 package com.example.money.manager.service;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,20 +16,23 @@ import java.util.Map;
 @Service
 public class Emailservice {
 
+    // application.properties se Brevo API Key uthayega
     @Value("${brevo.api.key}")
     private String apiKey;
 
+    // Sender mail ID (jo Brevo me verified hai)
     @Value("${spring.mail.from:dipeshjha799@gmail.com}")
     private String mailFrom;
 
+    // HTTP request bhejne ke liye Spring RestTemplate
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // 1. Account Activation / Normal Text & HTML Email
+    // 1. Normal Mails ke liye (Registration, Activation Link, Reminders)
     public void sendEmail(String toEmail, String subject, String body) {
         sendEmailWithAttachment(toEmail, subject, body, null, null);
     }
 
-    // 2. Email with PDF / Statement Attachment (Brevo API Compatible)
+    // 2. PDF Attachment wali Mails ke liye
     public void sendEmailWithAttachment(
             String toEmail,
             String subject,
@@ -49,27 +41,31 @@ public class Emailservice {
             String attachmentFileName
     ) {
         try {
-            System.out.println("===> [BREVO] Sending mail via HTTPS API to: " + toEmail);
+            System.out.println("===> [BREVO] Mail bhejna start: " + toEmail);
             String url = "https://api.brevo.com/v3/smtp/email";
 
+            // Headers me API Key set karna
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("api-key", apiKey);
 
+            // Kis naam aur email se jayegi
             Map<String, Object> sender = new HashMap<>();
             sender.put("email", mailFrom);
             sender.put("name", "SmartVault");
 
+            // Kisko jayegi (Receiver)
             Map<String, Object> recipient = new HashMap<>();
             recipient.put("email", toEmail);
 
+            // Email body & subject
             Map<String, Object> payload = new HashMap<>();
             payload.put("sender", sender);
             payload.put("to", List.of(recipient));
             payload.put("subject", subject);
             payload.put("htmlContent", body);
 
-            // Base64 Attachment conversion agar bytes provide kiye gaye hon
+            // Agar PDF file ke bytes hain toh Base64 string banakar attach karega
             if (attachmentBytes != null && attachmentBytes.length > 0) {
                 String base64Content = Base64.getEncoder().encodeToString(attachmentBytes);
                 Map<String, String> attachment = new HashMap<>();
@@ -80,18 +76,17 @@ public class Emailservice {
                 payload.put("attachment", List.of(attachment));
             }
 
+            // Brevo API par Request Send karna
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
-
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-            System.out.println("===> [BREVO SUCCESS] Status: " + response.getStatusCode());
+            System.out.println("===> [BREVO SUCCESS] Mail Chali Gayi! Status: " + response.getStatusCode());
 
         } catch (Exception e) {
-            System.err.println("===> [BREVO ERROR] Failed to send email: " + e.getMessage());
+            System.err.println("===> [BREVO ERROR] Mail Fail hui: " + e.getMessage());
             e.printStackTrace();
         }
     }
 }
-
 
 
 

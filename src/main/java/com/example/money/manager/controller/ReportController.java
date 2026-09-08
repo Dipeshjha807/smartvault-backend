@@ -4,9 +4,11 @@ import com.example.money.manager.entity.ExpenseEntity;
 import com.example.money.manager.entity.ProfileEntity;
 import com.example.money.manager.repository.ExpenseRepository;
 import com.example.money.manager.repository.ProfileRepository;
+import com.example.money.manager.service.Emailservice;
 import com.example.money.manager.service.PdfExportService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -33,9 +34,10 @@ public class ReportController {
     private final PdfExportService pdfExportService;
     private final ExpenseRepository expenseRepository;
     private final ProfileRepository profileRepository;
+    private final Emailservice emailService; // 👈 Brevo mail service inject kiya
 
     @GetMapping("/download-pdf")
-    public ResponseEntity<InputStreamResource> downloadExpenseReport(
+    public ResponseEntity<Resource> downloadExpenseReport(
             Principal principal,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
@@ -48,7 +50,7 @@ public class ReportController {
         ProfileEntity profile = profileRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
 
-        // Default: Last 3 months
+        // Default: Current month ya last 3 months
         if (endDate == null) {
             endDate = LocalDate.now();
         }
@@ -67,7 +69,7 @@ public class ReportController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date range exceeds maximum limit of 3 months.");
         }
 
-        // Fetch data
+        // Fetch data from DB
         List<ExpenseEntity> expenses = expenseRepository.findByProfileIdAndDateBetween(profile.getId(), startDate, endDate);
 
         // Convert to rows for PDF
@@ -78,25 +80,39 @@ public class ReportController {
             double amt = exp.getAmount() != null ? exp.getAmount().doubleValue() : 0.0;
             totalAmount += amt;
 
+            // Category ka clean name nikalna
+            String categoryName = "General";
+            if (exp.getCategory() != null) {
+                categoryName = exp.getCategory().getName() != null ? exp.getCategory().getName() : exp.getCategory().toString();
+            }
+
             rows.add(new String[]{
                     exp.getDate() != null ? exp.getDate().toString() : "-",
-                    exp.getCategory() != null ? exp.getCategory().toString() : "General",
+                    categoryName,
                     exp.getName() != null ? exp.getName() : "-",
                     String.format("%.2f", amt)
             });
         }
 
-        // Generate PDF stream
-        ByteArrayInputStream pdfStream = pdfExportService.generateExpensePdf(
+        // Step 1: PDF ke byte array generate karna
+        byte[] pdfBytes = pdfExportService.generateExpensePdfBytes(
                 userEmail, startDate, endDate, rows, totalAmount
         );
+        String fileName = "SmartVault_Report.pdf";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=SmartVault_Report.pdf");
+        // Step 2: Email send karna PDF attachment ke sath
+        String subject = "SmartVault - Your Expense Statement (" + startDate + " to " + endDate + ")";
+        String htmlBody = "<h3>Hello,</h3>"
+                + "<p>Please find attached your expense statement generated from SmartVault.</p>"
+                + "<p><b>Total Spent:</b> ₹ " + String.format("%.2f", totalAmount) + "</p>"
+                + "<br><p>Regards,<br><b>SmartVault Team</b></p>";
 
+        emailService.sendEmailWithAttachment(userEmail, subject, htmlBody, pdfBytes, fileName);
+
+        // Step 3: Browser me PDF download return karna
         return ResponseEntity.ok()
-                .headers(headers)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                 .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(pdfStream));
+                .body(new ByteArrayResource(pdfBytes));
     }
 }
