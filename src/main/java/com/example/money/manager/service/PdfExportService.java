@@ -10,11 +10,28 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PdfExportService {
 
-    public ByteArrayInputStream generateExpensePdf(
+    // Helper: CategoryEntity(...) ke lambe string se sirf clean name extract karega
+    private String cleanCategoryText(String raw) {
+        if (raw == null || raw.trim().isEmpty() || raw.equalsIgnoreCase("null")) {
+            return "-";
+        }
+        if (raw.startsWith("CategoryEntity(") || raw.contains("name=")) {
+            Matcher matcher = Pattern.compile("name=([^,)]+)").matcher(raw);
+            if (matcher.find()) {
+                return matcher.group(1).trim();
+            }
+        }
+        return raw;
+    }
+
+    // 1. Email Attachment ke liye byte array generate karne ka method
+    public byte[] generateExpensePdfBytes(
             String userEmail,
             LocalDate startDate,
             LocalDate endDate,
@@ -28,13 +45,13 @@ public class PdfExportService {
             PdfWriter.getInstance(document, out);
             document.open();
 
-            // 1. Header Title
+            // Header Title
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, new Color(30, 41, 59));
             Paragraph title = new Paragraph("SmartVault - Expense Statement", titleFont);
             title.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(title);
 
-            // 2. Metadata Subtitle
+            // Metadata Subtitle
             Font metaFont = FontFactory.getFont(FontFactory.HELVETICA, 10, new Color(100, 116, 139));
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM yyyy");
             String period = "Period: " + startDate.format(dtf) + " to " + endDate.format(dtf);
@@ -43,13 +60,13 @@ public class PdfExportService {
             sub.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(sub);
 
-            // 3. Table Setup (4 Columns: Date, Category, Description, Amount)
+            // Table Setup (4 Columns: Date, Category, Description, Amount)
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100f);
             table.setWidths(new float[]{2.5f, 3.0f, 4.5f, 2.5f});
             table.setSpacingBefore(10f);
 
-            // 4. Table Headers
+            // Table Headers
             Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, Color.WHITE);
             String[] headers = {"Date", "Category", "Description", "Amount (INR)"};
 
@@ -61,7 +78,7 @@ public class PdfExportService {
                 table.addCell(cell);
             }
 
-            // 5. Populate Data Rows
+            // Populate Data Rows
             Font dataFont = FontFactory.getFont(FontFactory.HELVETICA, 10, new Color(51, 65, 85));
             if (rows.isEmpty()) {
                 PdfPCell emptyCell = new PdfPCell(new Phrase("No expense records found for this period.", dataFont));
@@ -72,7 +89,14 @@ public class PdfExportService {
             } else {
                 for (String[] row : rows) {
                     for (int i = 0; i < row.length; i++) {
-                        PdfPCell cell = new PdfPCell(new Phrase(row[i] != null ? row[i] : "-", dataFont));
+                        String cellValue = row[i] != null ? row[i] : "-";
+
+                        // Column 1 Category hai, isko clean karega
+                        if (i == 1) {
+                            cellValue = cleanCategoryText(cellValue);
+                        }
+
+                        PdfPCell cell = new PdfPCell(new Phrase(cellValue, dataFont));
                         cell.setPadding(6f);
                         cell.setHorizontalAlignment(i == 3 ? Element.ALIGN_RIGHT : Element.ALIGN_LEFT);
                         table.addCell(cell);
@@ -100,6 +124,18 @@ public class PdfExportService {
             throw new RuntimeException("Failed to create PDF statement: " + e.getMessage());
         }
 
-        return new ByteArrayInputStream(out.toByteArray());
+        return out.toByteArray();
+    }
+
+    // 2. Direct Browser Download ke liye Stream method
+    public ByteArrayInputStream generateExpensePdf(
+            String userEmail,
+            LocalDate startDate,
+            LocalDate endDate,
+            List<String[]> rows,
+            double totalAmount
+    ) {
+        byte[] pdfBytes = generateExpensePdfBytes(userEmail, startDate, endDate, rows, totalAmount);
+        return new ByteArrayInputStream(pdfBytes);
     }
 }
