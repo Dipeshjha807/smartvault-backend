@@ -5,7 +5,6 @@ import com.example.money.manager.dto.ProfileDTO;
 import com.example.money.manager.entity.ProfileEntity;
 import com.example.money.manager.repository.ProfileRepository;
 import com.example.money.manager.util.JwtUtil;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,23 +39,29 @@ public class ProfileService {
         this.jwtUtil = jwtUtil;
     }
 
+    public ProfileDTO registerProfile(ProfileDTO profileDTO) {  ///  3 kam he ye method ka  1-> frontend se jo data aa rha he usko bto se entity me convert krna mean toentity() method ko call krwa rha he
+    ///2->Security & Account Link Setup (setActivationToken): /// User ka account verify karne ke liye ek unique verification token (UUID) generate karke profile me attach karta hai (taaki user ke email par activation link bheja ja sake).
+        ProfileEntity newProfile = toEntity(profileDTO);  /// ye lineka mtlb he user ne jo form bahara tha rofileDTO), usko Database ke format (ProfileEntity) me badal kar newProfile me daala.
+        newProfile.setActivationToken(UUID.randomUUID().toString());   //"Activation Token ek unique security code hota hai jo naye user ke email address ko verify karne aur fake/spam accounts ko rokne ke liye generate kiya jata hai."
+        newProfile.setPassword(passwordEncoder.encode(newProfile.getPassword())); /// encoding the password
+        newProfile = profileRepository.save(newProfile);
 
-    public ProfileDTO registerProfile(ProfileDTO profileDTO) throws MessagingException {  ///  3 kam he ye method ka  1-> frontend se jo data aa rha he usko bto se entity me convert krna mean toentity() method ko call krwa rha he
-                                                                         ///2->Security & Account Link Setup (setActivationToken): /// User ka account verify karne ke liye ek unique verification token (UUID) generate karke profile me attach karta hai (taaki user ke email par activation link bheja ja sake).
-            ProfileEntity newProfile = toEntity(profileDTO);  /// ye lineka mtlb he user ne jo form bahara tha rofileDTO), usko Database ke format (ProfileEntity) me badal kar newProfile me daala.
-            newProfile.setActivationToken(UUID.randomUUID().toString());   //"Activation Token ek unique security code hota hai jo naye user ke email address ko verify karne aur fake/spam accounts ko rokne ke liye generate kiya jata hai."
-       newProfile.setPassword(passwordEncoder.encode(newProfile.getPassword())); /// encoding the password
-        newProfile=profileRepository.save(newProfile);
-       //send activation mail
-        String activationLink=   activationURL+"/activate?token="+newProfile.getActivationToken();
-        String subject = "Profile Activation";
-        String body ="click on the link to activate your account: " + activationLink;
-       emailService.sendEmail(newProfile.getEmail(), subject,body );   //get mail mean reciver mail
+        //send activation mail with safe catch and logs
+        try {
+            String activationLink = activationURL + "/activate?token=" + newProfile.getActivationToken();
+            String subject = "Profile Activation";
+            String body = "click on the link to activate your account: " + activationLink;
+            System.out.println("DEBUG: Sending email to: " + newProfile.getEmail());
+            emailService.sendEmail(newProfile.getEmail(), subject, body);   //get mail mean reciver mail
+            System.out.println("DEBUG: Email sent successfully!");
+        } catch (Exception e) {
+            System.err.println("DEBUG ERROR: Email fail hui -> " + e.getMessage());
+            e.printStackTrace();
+        }
 
         return toDTO(newProfile);
-
-
     }
+
     //profile dto to entity
     public ProfileEntity toEntity(ProfileDTO profileDTO) {              /// "Mujhe ek ProfileDTO do, main tumhe ek ProfileEntity dunga."
         return ProfileEntity.builder()               ///  here we convert DTO to enity conversion because we have  tosave in DB so covert in entity
@@ -69,6 +74,7 @@ public class ProfileService {
                 .updatedAt(profileDTO.getUpdatedAt())
                 .build();                       ///Aur poori Entity tayar karke return kar di!
     }
+
     /// this is
     /// totally opposite of totntity method mean to entity me hum dto ke vaues ko entity ke field me dal kr save kr rhew the lkin yaha pe entity ke data ko dto medsl rhe he
     public ProfileDTO toDTO(ProfileEntity profileEntity) {
@@ -81,13 +87,11 @@ public class ProfileService {
                 .updatedAt(profileEntity.getUpdatedAt())
                 .build();
     }
-    public boolean activateProfile(String activationToken) {
 
+    public boolean activateProfile(String activationToken) {
         return profileRepository.findByActivationToken(activationToken)  /// Token se user find kar raha hai
                 .map(profile -> {
-
                     profile.setIsactive(true);    ///agar user mill gy TO TRUEW
-
                     profileRepository.save(profile);
 //                    Email Link
 //     ↓
@@ -101,11 +105,11 @@ public class ProfileService {
 //     ↓
 //                    Save
                     return true;
-
                 })
                 .orElse(false);
     }
-//user ka account active hai ya nahi check karne ke liye
+
+    //user ka account active hai ya nahi check karne ke liye
     public boolean isAccountActive(String email) {
         return profileRepository.findByEmail(email)
                 .map(profile -> profile.getIsactive())
@@ -114,19 +118,19 @@ public class ProfileService {
 
     /// getCurrentProfile() → jo user already login hai uska data nikalne ke liye
     public ProfileEntity getCurrentProfile() { //"Abhi login kaun hai?"
-      Authentication  authentication=SecurityContextHolder.getContext().getAuthentication();
-      return profileRepository.findByEmail(authentication.getName())
-              .orElseThrow(() -> new UsernameNotFoundException(
-                      "profile is not found with email: " + authentication.getName()
-              ));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return profileRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "profile is not found with email: " + authentication.getName()
+                ));
     }
+
     public ProfileDTO getPublicProfile(String email) {
-       ProfileEntity currentUser=null;
-        if(email==null){
-         currentUser=   getCurrentProfile();
-        }
-        else{
-           currentUser= profileRepository.findByEmail(email)
+        ProfileEntity currentUser = null;
+        if (email == null) {
+            currentUser = getCurrentProfile();
+        } else {
+            currentUser = profileRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("profile is not found with email: " + email));
         }
         return ProfileDTO.builder()
@@ -136,23 +140,19 @@ public class ProfileService {
                 .profieImageUrl(currentUser.getProfieImageUrl())
                 .createdAt(currentUser.getCreatedAt())
                 .updatedAt(currentUser.getUpdatedAt())
-
                 .build();
     }
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
-
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword())); ///Mujhe email/password mila Check karo sahi hai ya nahi.
-           ///  generate jwt token
-        String token=jwtUtil.generateToken(authDTO.getEmail());   /// token bann rha he
-            return Map.of("token",token,"user",getPublicProfile(authDTO.getEmail()));
-        }
-
-        catch (Exception e){
+            ///  generate jwt token
+            String token = jwtUtil.generateToken(authDTO.getEmail());   /// token bann rha he
+            return Map.of("token", token, "user", getPublicProfile(authDTO.getEmail()));
+        } catch (Exception e) {
             throw new BadCredentialsException("Invalid username and password");
         }
-       // Frontend
+        // Frontend
 //     ↓
 //        Login Controller
 //     ↓
