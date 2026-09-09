@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,8 +23,8 @@ import java.util.UUID;
 @Service
 public class ProfileService {
 
-    @Autowired
-    private ProfileRepository profileRepository;
+
+    private final ProfileRepository profileRepository;
     private final Emailservice emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -32,7 +33,8 @@ public class ProfileService {
     @Value("${app.backend.url}")
     private String activationURL;
 
-    public ProfileService(Emailservice emailService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public ProfileService(ProfileRepository profileRepository, Emailservice emailService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+        this.profileRepository = profileRepository;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -43,7 +45,8 @@ public class ProfileService {
     ///2->Security & Account Link Setup (setActivationToken): /// User ka account verify karne ke liye ek unique verification token (UUID) generate karke profile me attach karta hai (taaki user ke email par activation link bheja ja sake).
         ProfileEntity newProfile = toEntity(profileDTO);  /// ye lineka mtlb he user ne jo form bahara tha rofileDTO), usko Database ke format (ProfileEntity) me badal kar newProfile me daala.
         newProfile.setActivationToken(UUID.randomUUID().toString());   //"Activation Token ek unique security code hota hai jo naye user ke email address ko verify karne aur fake/spam accounts ko rokne ke liye generate kiya jata hai."
-        newProfile.setPassword(passwordEncoder.encode(newProfile.getPassword())); /// encoding the password
+        newProfile.setPassword(passwordEncoder.encode(profileDTO.getPassword())); /// to encode the password
+        newProfile.setIsactive(false);
         newProfile = profileRepository.save(newProfile);
 
         //send activation mail with safe catch and logs
@@ -51,11 +54,11 @@ public class ProfileService {
             String activationLink = activationURL + "/activate?token=" + newProfile.getActivationToken();
             String subject = "Profile Activation";
             String body = "click on the link to activate your account: " + activationLink;
-            System.out.println("DEBUG: Sending email to: " + newProfile.getEmail());
+           // System.out.println("DEBUG: Sending email to: " + newProfile.getEmail());
             emailService.sendEmail(newProfile.getEmail(), subject, body);   //get mail mean reciver mail
-            System.out.println("DEBUG: Email sent successfully!");
+           // System.out.println("DEBUG: Email sent successfully!");
         } catch (Exception e) {
-            System.err.println("DEBUG ERROR: Email fail hui -> " + e.getMessage());
+           // System.err.println("DEBUG ERROR: Email fail hui -> " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -87,11 +90,13 @@ public class ProfileService {
                 .updatedAt(profileEntity.getUpdatedAt())
                 .build();
     }
+    @Transactional
 
     public boolean activateProfile(String activationToken) {
         return profileRepository.findByActivationToken(activationToken)  /// Token se user find kar raha hai
                 .map(profile -> {
                     profile.setIsactive(true);    ///agar user mill gy TO TRUEW
+                    profile.setActivationToken(null);
                     profileRepository.save(profile);
 //                    Email Link
 //     ↓
@@ -149,9 +154,14 @@ public class ProfileService {
             ///  generate jwt token
             String token = jwtUtil.generateToken(authDTO.getEmail());   /// token bann rha he
             return Map.of("token", token, "user", getPublicProfile(authDTO.getEmail()));
+        } catch (org.springframework.security.authentication.DisabledException e) {
+            throw new BadCredentialsException("Account is not active. Please click the activation link in your email.");
+
+            // 👈 (Step 2: Password ya doosre error pakdo)
         } catch (Exception e) {
             throw new BadCredentialsException("Invalid username and password");
         }
+
         // Frontend
 //     ↓
 //        Login Controller

@@ -20,9 +20,12 @@ public class AppUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
                     ProfileEntity existingProfile= profileRepository.findByEmail(email)
                             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        boolean isEnabled = Boolean.TRUE.equals(existingProfile.getIsactive());
                     return User.builder()            ///iska kam he Database se nikali hui user information ko Spring Security ke samajhne wale format (UserDetails) me convert karke wapas dena.
                             .username(existingProfile.getEmail())
                             .password(existingProfile.getPassword())
+                            .disabled(!isEnabled) // 👈 Agar isactive false hai toh login block karega
                             .authorities(Collections.emptyList())
                             .build();
 
