@@ -54,8 +54,7 @@ public class SecurityConfig {
 
         // Sirf local aur deployed frontend allow karo ye Batata hai ki request kahan se aa sakti hai. means agar ye nhi hoga to browseer security error dega so aisa krna padega sb link dene ka
         // agar hum chae to crossorigin anotation laga skte the sb controllers me lkin ye jada acha he
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "http://localhost:3000", "https://*.onrender.com"));
-
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "http://localhost:3000", "https://*.onrender.com", "https://smartvault-finance.vercel.app", "https://*.vercel.app"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         configuration.setAllowCredentials(true);

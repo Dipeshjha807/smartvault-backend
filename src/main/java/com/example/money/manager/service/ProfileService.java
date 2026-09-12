@@ -94,9 +94,9 @@ public class ProfileService {
 
     public boolean activateProfile(String activationToken) {
         return profileRepository.findByActivationToken(activationToken)  /// Token se user find kar raha hai
-                .map(profile -> {
-                    profile.setIsactive(true);    ///agar user mill gy TO TRUEW
-                    profile.setActivationToken(null);
+                .map(profile -> {    ///  agar mill gya to internally if chalge
+                    profile.setIsactive(true);    ///agar user mill gy TO TRUE kia kyu ki jaise hi link click hoga woise hi is active hoga to wo chekc krne ke lie ki kya isactive true he
+                    profile.setActivationToken(null); /// agar hn isactive true he to uske bd expliciterly token null kr dega kyu ki activation ke bd null hi sah he uske bd uska koi kam nhi ge agar token raha to dikket hogha
                     profileRepository.save(profile);
 //                    Email Link
 //     ↓
@@ -111,7 +111,7 @@ public class ProfileService {
 //                    Save
                     return true;
                 })
-                .orElse(false);
+                .orElse(false);   /// nhi miila agar to internal false ho jyga
     }
 
     //user ka account active hai ya nahi check karne ke liye
